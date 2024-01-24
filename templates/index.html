@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="col col-lg-2">
+    <h1>Data caching</h1>
+    <p> Welcome to the home page! </p>
+    <hr>
+    <!-- button groups -->
+    <div class=" d-md-flex justify-content-between">
+        <a href="{% url 'post_create' %}" class="btn btn-outline-primary">+ Add</a>
+        <a href="{% url 'posts_clean' %}" class="btn btn-outline-danger">Clean</a>
+    </div><br>
+
+    <ul class="list-group">
+        {% if posts is empty %}
+        <li class="list-group-item">
+            <p class="fw-bold text-muted fs-md-7">No posts yet!</p>
+        </li>
+        {% else %}
+        {% for post in posts %}
+        <li class="list-group-item">
+            <a href="#" class="d-inline-block text-truncate" style="max-width: 100%;">{{ post.title }}</a>
+            <p class="fw-bold text-muted fs-md-7">{{ post.created_at| date }}</p>
+        </li>
+        {% endfor %}
+        {% endif %}
+    </ul>
+</div>
+
+
+{% endblock %}
