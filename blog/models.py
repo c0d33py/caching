@@ -1,10 +1,5 @@
+from django.core.cache import cache
 from django.db import models
-from django.db.models.query import QuerySet
-
-from redis_tut.cache import (
-    set_contribution_revenue_cache_decorator,
-    set_emission_rate_cache_decorator,
-)
 
 
 class Post(models.Model):
@@ -16,27 +11,12 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-
-class CategoryEmissionRatesQuerySet(QuerySet):
-    @set_emission_rate_cache_decorator
-    @set_contribution_revenue_cache_decorator
-    def update(self, **kwargs):
-        return super().update(**kwargs)
-
-    @set_emission_rate_cache_decorator
-    @set_contribution_revenue_cache_decorator
-    def create(self, **kwargs):
-        return super().create(**kwargs)
-
-    @set_emission_rate_cache_decorator
-    @set_contribution_revenue_cache_decorator
-    def delete(self):
-        return super().delete()
+    def save(self, *args, **kwargs):
+        cache.delete('posts')
+        super().save(*args, **kwargs)
 
 
 class CategoryEmissionRates(models.Model):
-    objects = CategoryEmissionRatesQuerySet.as_manager()
-
     category = models.CharField(max_length=100)
     emission_rate = models.FloatField()
     green_house_contribution = models.FloatField()
@@ -46,13 +26,4 @@ class CategoryEmissionRates(models.Model):
 
     def __str__(self):
         return f"{self.category} - {self.emission_rate}"
-
-    @set_emission_rate_cache_decorator
-    @set_contribution_revenue_cache_decorator
-    def save(self, *args, **kwargs):
-        return super().save(*args, **kwargs)
-
-    @set_emission_rate_cache_decorator
-    @set_contribution_revenue_cache_decorator
-    def delete(self, *args, **kwargs):
-        return super().delete(*args, **kwargs)
+        return f"{self.category} - {self.emission_rate}"

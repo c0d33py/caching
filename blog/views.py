@@ -25,7 +25,7 @@ def index(request):
 
 def post_create(request):
     post = generate_random_posts()
-    cache.set('posts', post)
+    print(post)
     return redirect('index')
 
 
