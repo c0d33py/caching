@@ -12,10 +12,9 @@ def generate_random_posts():
 
 
 def index(request):
-    posts = cache.get('posts')
+    posts = cache.get('post_qs')
     if not posts:
-        posts = Post.objects.all()
-        cache.set('posts', posts)
+        posts = Post.objects.active()
 
     context = {
         'posts': posts,

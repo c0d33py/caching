@@ -1,0 +1,2 @@
+class YouTubeAPIClientException(Exception):
+    pass
