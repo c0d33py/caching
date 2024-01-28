@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'debug_toolbar',
     'blog.apps.BlogConfig',
-    'rest_framework',
+    'gclient.apps.GclientConfig',
 ]
 
 MIDDLEWARE = [
