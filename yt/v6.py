@@ -45,4 +45,11 @@ class YouTubeAPIClient:
         )
         return response['items']
 
-    # Add other methods here that use self.current_client
+    @handle_rate_limit
+    def get_video_details(self, video_id):
+        response = (
+            self.current_client.videos()
+            .list(id=video_id, part='snippet,contentDetails,statistics')
+            .execute()
+        )
+        return response['items'][0]

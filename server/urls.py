@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),
     path("__debug__/", include("debug_toolbar.urls")),
-    path('api/', ChannelView.as_view(), name='api'),
+    path('api/v1/channels/', ChannelView.as_view(), name='api'),
 ]
 
 if settings.DEBUG:

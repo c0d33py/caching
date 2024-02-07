@@ -4,21 +4,38 @@ from contextlib import contextmanager
 from functools import partial
 from itertools import cycle
 
+from django.core.cache import cache
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+from gclient.models import DevKey
+
 
 class YouTubeAPIClient:
-    def __init__(self, api_keys):
-        self.api_keys = api_keys
+    """
+    A class to manage the youtube api client
+    """
+
+    def __init__(self):
+        self.api_keys_cache_key = 'api_keys'
+        self.api_keys = self.get_api_keys()
         self.youtube_clients = cycle(
             self.create_client(api_key) for api_key in self.api_keys
         )
+
         self.current_client = next(self.youtube_clients)
         self.quota_exceeded = False
 
+    def get_api_keys(self):
+        """Get the API keys from the cache or query the database."""
+        api_keys = cache.get(self.api_keys_cache_key)
+        if api_keys is None:
+            api_keys = list(DevKey.objects.filter(is_active=True))
+            cache.set(self.api_keys_cache_key, [api_key.key for api_key in api_keys])
+        return api_keys
+
     def create_client(self, api_key):
-        return partial(build, 'youtube', 'v3', developerKey=api_key)
+        return build('youtube', 'v3', developerKey=api_key)
 
     @contextmanager
     def current_client_context(self):

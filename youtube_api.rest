@@ -1,0 +1,44 @@
+@url = https://www.googleapis.com/youtube/v3/
+
+@api_key = AIzaSyAF9qyz6lPBUbAIwUL2sVn2BO6psEIsO2M
+
+@channelId1 = UC_vt34wimdCzdkrzVejwX9g
+@channelId2 = UCMmpLL2ucRHAXbNHiCPyIyg
+
+@playlistId1 = UU_vt34wimdCzdkrzVejwX9g
+
+@liveStream1 = O3DPVlynUM0
+@liveStream2 = sUKwTVAc0Vo
+
+@videoId1 = yeLQxW57-Kg
+@videoId2 = GGMq9MT4_cw
+
+
+# Vidoe object detail
+# GET {{url}}videos?part=statistics&id=zcpCBBZlvNc&key={{api_key}}
+
+# check if channel have live streem
+# GET {{url}}search?&part=snippet,id&key={{api_key}}&type=video&channelId=UCsgC5cbz3DE2Shh34gNKiog&maxResults=100
+
+# YouTube allows you to send at most 50 multiple requests in a single request. This kind of request is known as a batch processing request.
+# {{url}}videos?key={{api_key}}&part=liveStreamingDetails&id={{liveStream1}},{{liveStream2}}
+
+# channel views update
+# {{url}}channels/?part=snippet,contentDetails,statistics,brandingSettings&key={{api_key}}&id={{channelId1}},{{channelId2}}
+
+# Youtube Free version API
+# https://yt.lemnoslife.com/noKey/videos?part=statistics,contentDetails&id=mRLwxRqrT_Q
+
+
+# URL request for retrieve the "upload" playlist id from the channel_id previously
+# {{url}}channels?part=id%2Csnippet%2CcontentDetails&fields=items(contentDetails%2FrelatedPlaylists%2Fuploads%2Csnippet%2Flocalized)&id={{channelId1}}&key={{api_key}}
+
+# V-1 Once retrieved the uploads value (as specified in previous lines), now it's time to use the "playlistItems" API for build the following URL:
+# {{url}}playlistItems?part=snippet%2CcontentDetails&playlistId=UU_vt34wimdCzdkrzVejwX9g&maxResults=25&key={{api_key}}
+
+# V-2 Once retrieved the uploads value (as specified in previous lines), now it's time to use the "playlistItems" API for build the following URL:
+# {{url}}playlistItems?part=snippet&fields=nextPageToken,items(snippet(publishedAt,title,desc%20ription,thumbnails(default(url)),resourceId(videoId)))&playlistId={{playlistId1}}&maxResults=50&order=date&key={{api_key}}
+
+# Filter by date range
+{{url}}search?key={{api_key}}&channelId={{channelId1}}&part=id&order=date&publishedAfter=2023-09-21T00:00:00Z&publishedBefore=2023-09-22T02:00:00Z
+
